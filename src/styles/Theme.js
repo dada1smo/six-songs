@@ -1,4 +1,5 @@
 export const DarkTheme = {
+  ibmPlexSans: "'IBM Plex Sans', Trebuchet, sans-serif",
   primary: {
     500: '#BB6BD9',
   },
@@ -6,6 +7,7 @@ export const DarkTheme = {
     500: '#D0FC00',
   },
   neutral: {
+    '000': '#FFFFFF',
     800: '#1C1C1C',
     900: '#000000',
   },
