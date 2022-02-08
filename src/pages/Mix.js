@@ -17,6 +17,35 @@ const testData = [
     cover:
       'https://images.genius.com/5c60e500c2fee0bb00b23d68d92feaa6.300x300x1.jpg',
   },
+  {
+    id: 3,
+    title: 'Flor de Lis',
+    artist: 'Djavan',
+    cover:
+      'https://images.genius.com/ebddef4931e5380d7ba8fb7aa598f98b.300x300x1.jpg',
+  },
+  {
+    id: 4,
+    title: 'SAOKO',
+    artist: 'ROSALÍA',
+    cover:
+      'https://images.genius.com/d10cb78671f6e0fc1c257e5c95b9d4d1.300x300x1.jpg',
+  },
+  {
+    id: 5,
+    title: 'L.E.S. Artistes',
+    artist: 'Santigold',
+    cover:
+      'https://images.genius.com/a4e71e062f28f73bed6144244b187163.300x300x1.png',
+  },
+  {
+    id: 6,
+    title:
+      'Medley Lud Session - Modo Avião / A Tua Voz / 700 por Hora / Radar / A Música Mais Triste do Ano',
+    artist: 'LUDMILLA & Gloria Groove',
+    cover:
+      'https://images.genius.com/2578775d3363e98151f725aee8267c8c.300x300x1.png',
+  },
 ];
 
 const Wrapper = styled.div`
