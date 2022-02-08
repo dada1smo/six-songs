@@ -1,13 +1,13 @@
 import { createGlobalStyle } from 'styled-components';
-import { DarkTheme } from './Theme';
+import { Theme } from './Theme';
 
 export const GlobalStyles = createGlobalStyle`
     body {
-        background: ${DarkTheme.neutral[800]};
+        background: ${Theme.neutral[800]};
         margin: 0;
         padding: 0;
-        font-family: ${DarkTheme.ibmPlexSans};
-        color: ${DarkTheme.neutral['000']};
+        font-family: ${Theme.ibmPlexSans};
+        color: ${Theme.neutral['000']};
 
         & * {
             margin: 0;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DarkTheme } from '../styles/Theme';
+import { Theme } from '../styles/Theme';
 import addIcon from '../images/add-icon.svg';
 import checkIcon from '../images/check-icon.svg';
 import removeIcon from '../images/remove-icon.svg';
@@ -8,7 +8,7 @@ import arrowDownIcon from '../images/arrow-down-icon.svg';
 import { IconButton } from '../styles/Button';
 
 const Card = styled.div`
-  background: ${DarkTheme.neutral[900]};
+  background: ${Theme.neutral[900]};
   display: flex;
   align-items: center;
   gap: 32px;
@@ -50,9 +50,9 @@ const Card = styled.div`
       height: 100%;
       width: 100%;
       background: linear-gradient(
-        ${DarkTheme.primary[500]},
-        ${DarkTheme.hightlight[500]},
-        ${DarkTheme.neutral[900]}
+        ${Theme.primary[500]},
+        ${Theme.hightlight[500]},
+        ${Theme.neutral[900]}
       );
       border-radius: 100%;
     }

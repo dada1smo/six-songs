@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { DarkTheme } from './Theme';
+import { Theme } from './Theme';
 
 export const Button = styled.button`
   display: inline-flex;
   background-color: transparent;
   align-items: center;
   justify-content: center;
-  font-family: ${DarkTheme.ibmPlexSans};
+  font-family: ${Theme.ibmPlexSans};
   font-weight: 400;
   font-size: 1rem;
   transition: 0.3s;
@@ -31,10 +31,10 @@ export const IconButton = styled(Button)`
   border-radius: 100%;
   opacity: ${(props) => (props.disabled ? '40%' : '100%')};
   background: ${(props) =>
-    props.selected ? DarkTheme.hightlight[500] : DarkTheme.neutral[900]};
+    props.selected ? Theme.hightlight[500] : Theme.neutral[900]};
 
   &:hover {
     background: ${(props) =>
-      props.selected ? DarkTheme.hightlight[500] : DarkTheme.primary[500]};
+      props.selected ? Theme.hightlight[500] : Theme.primary[500]};
   }
 `;
