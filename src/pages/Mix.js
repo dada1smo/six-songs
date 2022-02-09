@@ -1,60 +1,17 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CardSong from '../components/CardSong';
-
-const testData = [
-  {
-    id: 1,
-    title: 'Gasoline',
-    artist: 'The Weeknd',
-    cover:
-      'https://images.genius.com/f15065ef66cd717c267d3f2e37313bc1.300x300x1.jpg',
-  },
-  {
-    id: 2,
-    title: 'Murder on the Dancefloor',
-    artist: 'Sophie Ellis-Bextor',
-    cover:
-      'https://images.genius.com/5c60e500c2fee0bb00b23d68d92feaa6.300x300x1.jpg',
-  },
-  {
-    id: 3,
-    title: 'Flor de Lis',
-    artist: 'Djavan',
-    cover:
-      'https://images.genius.com/ebddef4931e5380d7ba8fb7aa598f98b.300x300x1.jpg',
-  },
-  {
-    id: 4,
-    title: 'SAOKO',
-    artist: 'ROSALÍA',
-    cover:
-      'https://images.genius.com/d10cb78671f6e0fc1c257e5c95b9d4d1.300x300x1.jpg',
-  },
-  {
-    id: 5,
-    title: 'L.E.S. Artistes',
-    artist: 'Santigold',
-    cover:
-      'https://images.genius.com/a4e71e062f28f73bed6144244b187163.300x300x1.png',
-  },
-  {
-    id: 6,
-    title:
-      'Medley Lud Session - Modo Avião / A Tua Voz / 700 por Hora / Radar / A Música Mais Triste do Ano',
-    artist: 'LUDMILLA & Gloria Groove',
-    cover:
-      'https://images.genius.com/2578775d3363e98151f725aee8267c8c.300x300x1.png',
-  },
-];
+import InputSearch from '../components/InputSearch';
+import { Theme } from '../styles/Theme';
 
 const Wrapper = styled.div`
   padding: 40px 60px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 20vh 80vh;
+  grid-template-rows: 20% 80%;
   grid-gap: 16px;
-  min-height: 100vh;
+  height: 100vh;
 
   & h1 {
     grid-column: 1 / span 12;
@@ -65,6 +22,18 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow: auto;
+    padding: 0 16px 20px 0;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 100%;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: ${Theme.neutral[700]};
+      border-radius: 4px;
+    }
   }
 
   & .selected {
@@ -72,12 +41,67 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow: auto;
+    padding: 0 16px 20px 0;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 100%;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: ${Theme.neutral[700]};
+      border-radius: 4px;
+    }
+  }
+`;
+
+const SelectedSongsList = styled.div`
+  display: flex;
+  gap: 12px;
+
+  & div {
+    width: 100%;
   }
 `;
 
 export default function Mix() {
-  const [searchResults, setSearchResults] = useState(testData);
+  const [search, setSearch] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const [selectedSongs, setSelectedSongs] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(search);
+  };
+
+  useEffect(() => {
+    const getSongs = async () => {
+      const { data } = await axios.get(
+        `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
+      );
+      const results = data.response.hits.map((song) => song.result);
+      console.log(results);
+      const idResult = results.map((song) => song.id);
+      selectedIds.forEach((id) => {
+        if (idResult.includes(id)) {
+          const exists = results.findIndex((song) => song.id === id);
+          results[exists].selected = true;
+        }
+      });
+      setSearchResults(results);
+    };
+    if (searchTerm.length > 3) {
+      getSongs();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setSelectedIds(selectedSongs.map((song) => song.id));
+  }, [selectedSongs]);
 
   const handleSelectSong = (id) => {
     const selected = searchResults.find((song) => song.id === id);
@@ -88,8 +112,16 @@ export default function Mix() {
 
   const handleRemoveSong = (id) => {
     const selected = selectedSongs.filter((song) => song.id !== id);
-    const selectedIndex = searchResults.findIndex((song) => song.id === id);
-    searchResults[selectedIndex].selected = false;
+    const selectedResult = searchResults
+      .filter((song) => song.id === id)
+      .map((song) => song.id);
+    console.log(selectedResult);
+    if (selectedResult > 0) {
+      const selectedIndex = searchResults.findIndex(
+        (song) => song.id === selectedResult[0]
+      );
+      searchResults[selectedIndex].selected = false;
+    }
     setSelectedSongs([...selected]);
   };
 
@@ -109,43 +141,61 @@ export default function Mix() {
     setSelectedSongs([...selectedSongs]);
   };
 
-  console.log(selectedSongs);
-
   return (
     <Wrapper>
       <h1>This is the mix creation page!</h1>
       <div className="search">
-        {searchResults.map(({ id, title, artist, cover, selected }) => {
-          return (
-            <CardSong
-              key={id}
-              id={id}
-              title={title}
-              artist={artist}
-              cover={cover}
-              handleSelect={selected ? false : handleSelectSong}
-              selected={selected}
-            />
-          );
-        })}
+        <InputSearch
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onSubmit={handleSearch}
+        />
+        {searchResults.map(
+          ({
+            id,
+            title,
+            artist_names,
+            song_art_image_thumbnail_url,
+            selected,
+          }) => {
+            return (
+              <CardSong
+                key={id}
+                id={id}
+                title={title}
+                artist={artist_names}
+                cover={song_art_image_thumbnail_url}
+                handleSelect={selected ? false : handleSelectSong}
+                selected={selected}
+              />
+            );
+          }
+        )}
       </div>
       <div className="selected">
-        {selectedSongs.map(({ id, title, artist, cover }, index) => {
-          return (
-            <CardSong
-              key={id}
-              id={id}
-              isFirst={index === 0}
-              isLast={index === selectedSongs.length - 1}
-              title={title}
-              artist={artist}
-              cover={cover}
-              handleRemove={handleRemoveSong}
-              handleMoveUp={handleMoveUp}
-              handleMoveDown={handleMoveDown}
-            />
-          );
-        })}
+        {selectedSongs.map(
+          (
+            { id, title, artist_names, song_art_image_thumbnail_url },
+            index
+          ) => {
+            return (
+              <SelectedSongsList key={id}>
+                <h2>#{index + 1}</h2>
+                <CardSong
+                  id={id}
+                  isFirst={index === 0}
+                  isLast={index === selectedSongs.length - 1}
+                  title={title}
+                  artist={artist_names}
+                  cover={song_art_image_thumbnail_url}
+                  handleRemove={handleRemoveSong}
+                  handleMoveUp={handleMoveUp}
+                  handleMoveDown={handleMoveDown}
+                />
+              </SelectedSongsList>
+            );
+          }
+        )}
       </div>
     </Wrapper>
   );

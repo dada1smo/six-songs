@@ -28,16 +28,16 @@ const Card = styled.div`
 
   & figure {
     position: relative;
-    height: 100px;
-    width: 100px;
-    min-height: 100px;
-    min-width: 100px;
+    height: 80px;
+    width: 80px;
+    min-height: 80px;
+    min-width: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 
     & img {
-      max-width: 80px;
+      max-width: 64px;
       position: relative;
       z-index: 20;
     }
