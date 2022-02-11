@@ -8,6 +8,7 @@ export const Theme = {
   },
   neutral: {
     '000': '#FFFFFF',
+    700: '#0f0f0f',
     800: '#1C1C1C',
     900: '#000000',
   },

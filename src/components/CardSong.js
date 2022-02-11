@@ -28,16 +28,16 @@ const Card = styled.div`
 
   & figure {
     position: relative;
-    height: 100px;
-    width: 100px;
-    min-height: 100px;
-    min-width: 100px;
+    height: 80px;
+    width: 80px;
+    min-height: 80px;
+    min-width: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 
     & img {
-      max-width: 80px;
+      max-width: 64px;
       position: relative;
       z-index: 20;
     }
@@ -63,6 +63,46 @@ const Card = styled.div`
     flex-direction: column;
     gap: 8px;
     width: 40px;
+  }
+`;
+
+const Skeleton = styled(Card)`
+  & figure {
+    &:after {
+      background: linear-gradient(
+        -45deg,
+        ${Theme.hightlight[500]},
+        ${Theme.primary[500]},
+        ${Theme.neutral[900]}
+      );
+      background-size: 400% 400%;
+      animation: gradient 2s ease infinite;
+    }
+  }
+
+  & .placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      -45deg,
+      ${Theme.neutral[800]},
+      ${Theme.neutral[900]},
+      ${Theme.neutral[800]}
+    );
+    background-size: 400% 400%;
+    animation: gradient 2s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 
@@ -122,5 +162,16 @@ export default function CardSong({
         )}
       </div>
     </Card>
+  );
+}
+
+export function CardSkeleton() {
+  return (
+    <Skeleton>
+      <div className="song">
+        <figure></figure>
+      </div>
+      <div className="placeholder"></div>
+    </Skeleton>
   );
 }

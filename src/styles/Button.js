@@ -17,17 +17,17 @@ export const Button = styled.button`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
   position: relative;
 
-  &img {
-    width: 24px;
-    height: 24px;
+  & img {
+    width: 20px;
+    height: 20px;
   }
 `;
 
 export const IconButton = styled(Button)`
-  height: 40px;
-  width: 40px;
-  min-height: 40px;
-  min-width: 40px;
+  height: 32px;
+  width: 32px;
+  min-height: 32px;
+  min-width: 32px;
   border-radius: 100%;
   opacity: ${(props) => (props.disabled ? '40%' : '100%')};
   background: ${(props) =>
