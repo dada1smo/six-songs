@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import CardSong from '../components/CardSong';
+import CardSong, { CardSkeleton } from '../components/CardSong';
 import InputSearch from '../components/InputSearch';
+import { Device } from '../styles/Breakpoints';
 import { Theme } from '../styles/Theme';
 
 const Wrapper = styled.div`
@@ -10,11 +11,17 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 20% 80%;
-  grid-gap: 16px;
+  column-gap: 16px;
   height: 100vh;
 
+  @media ${Device.laptop} {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 20% 40% 40%;
+    gap: 16px;
+  }
+
   & h1 {
-    grid-column: 1 / span 12;
+    grid-column: 1 / span all;
   }
 
   & .search {
@@ -25,12 +32,17 @@ const Wrapper = styled.div`
     overflow: auto;
     padding: 0 16px 20px 0;
 
+    @media ${Device.laptop} {
+      grid-column: 1 / span all;
+      grid-row: 2 / span 1;
+    }
+
     &::-webkit-scrollbar {
       width: 12px;
       height: 100%;
     }
 
-    ::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb {
       background: ${Theme.neutral[700]};
       border-radius: 4px;
     }
@@ -44,12 +56,17 @@ const Wrapper = styled.div`
     overflow: auto;
     padding: 0 16px 20px 0;
 
+    @media ${Device.laptop} {
+      grid-column: 1 / span all;
+      grid-row: 3 / span 1;
+    }
+
     &::-webkit-scrollbar {
       width: 12px;
       height: 100%;
     }
 
-    ::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb {
       background: ${Theme.neutral[700]};
       border-radius: 4px;
     }
@@ -71,6 +88,7 @@ export default function Mix() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -79,19 +97,24 @@ export default function Mix() {
 
   useEffect(() => {
     const getSongs = async () => {
-      const { data } = await axios.get(
-        `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
-      );
-      const results = data.response.hits.map((song) => song.result);
-      console.log(results);
-      const idResult = results.map((song) => song.id);
-      selectedIds.forEach((id) => {
-        if (idResult.includes(id)) {
-          const exists = results.findIndex((song) => song.id === id);
-          results[exists].selected = true;
-        }
-      });
-      setSearchResults(results);
+      setLoading(true);
+      try {
+        const { data } = await axios.get(
+          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
+        );
+        const results = data.response.hits.map((song) => song.result);
+        console.log(results);
+        const idResult = results.map((song) => song.id);
+        selectedIds.forEach((id) => {
+          if (idResult.includes(id)) {
+            const exists = results.findIndex((song) => song.id === id);
+            results[exists].selected = true;
+          }
+        });
+        setSearchResults(results);
+      } finally {
+        setLoading(false);
+      }
     };
     if (searchTerm.length > 3) {
       getSongs();
@@ -150,27 +173,29 @@ export default function Mix() {
           onChange={(e) => setSearch(e.target.value)}
           onSubmit={handleSearch}
         />
-        {searchResults.map(
-          ({
-            id,
-            title,
-            artist_names,
-            song_art_image_thumbnail_url,
-            selected,
-          }) => {
-            return (
-              <CardSong
-                key={id}
-                id={id}
-                title={title}
-                artist={artist_names}
-                cover={song_art_image_thumbnail_url}
-                handleSelect={selected ? false : handleSelectSong}
-                selected={selected}
-              />
-            );
-          }
-        )}
+        {loading
+          ? [...Array(10)].map((skeleton) => <CardSkeleton />)
+          : searchResults.map(
+              ({
+                id,
+                title,
+                artist_names,
+                song_art_image_thumbnail_url,
+                selected,
+              }) => {
+                return (
+                  <CardSong
+                    key={id}
+                    id={id}
+                    title={title}
+                    artist={artist_names}
+                    cover={song_art_image_thumbnail_url}
+                    handleSelect={selected ? false : handleSelectSong}
+                    selected={selected}
+                  />
+                );
+              }
+            )}
       </div>
       <div className="selected">
         {selectedSongs.map(
