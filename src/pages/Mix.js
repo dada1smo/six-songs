@@ -103,7 +103,6 @@ export default function Mix() {
           `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
         );
         const results = data.response.hits.map((song) => song.result);
-        console.log(results);
         const idResult = results.map((song) => song.id);
         selectedIds.forEach((id) => {
           if (idResult.includes(id)) {
@@ -138,7 +137,6 @@ export default function Mix() {
     const selectedResult = searchResults
       .filter((song) => song.id === id)
       .map((song) => song.id);
-    console.log(selectedResult);
     if (selectedResult > 0) {
       const selectedIndex = searchResults.findIndex(
         (song) => song.id === selectedResult[0]
@@ -174,7 +172,9 @@ export default function Mix() {
           onSubmit={handleSearch}
         />
         {loading
-          ? [...Array(10)].map((skeleton) => <CardSkeleton />)
+          ? [...Array(10)].map((skeleton, index) => (
+              <CardSkeleton key={index} />
+            ))
           : searchResults.map(
               ({
                 id,
