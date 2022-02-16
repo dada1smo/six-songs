@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CardSong, { CardSkeleton } from '../components/CardSong';
 import InputSearch from '../components/InputSearch';
+import InputTitle from '../components/InputTitle';
 import { Device } from '../styles/Breakpoints';
 import { Theme } from '../styles/Theme';
 
@@ -20,8 +22,11 @@ const Wrapper = styled.div`
     gap: 16px;
   }
 
-  & h1 {
+  & .title {
     grid-column: 1 / span all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   & .search {
@@ -83,12 +88,35 @@ const SelectedSongsList = styled.div`
 `;
 
 export default function Mix() {
+  const { name } = useParams();
+  const [title, setTitle] = useState(`6 músicas ${name}`);
+  const [editTitle, setEditTitle] = useState(false);
   const [search, setSearch] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleSetTitle = (e) => {
+    e.preventDefault();
+    setTitle(e.target.value);
+  };
+
+  const handleEditTitle = () => {
+    const actualTitle = title.replace('6 músicas ', '');
+    setTitle(actualTitle);
+    setEditTitle(true);
+  };
+
+  const handleFinishEdit = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const fullTitle = `6 músicas ${title}`;
+      setTitle(fullTitle);
+      setEditTitle(false);
+    }
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -164,7 +192,15 @@ export default function Mix() {
 
   return (
     <Wrapper>
-      <h1>This is the mix creation page!</h1>
+      <div className="title">
+        <InputTitle
+          value={title}
+          onChange={handleSetTitle}
+          handleEditTitle={handleEditTitle}
+          edit={editTitle}
+          onKeyPress={handleFinishEdit}
+        />
+      </div>
       <div className="search">
         <InputSearch
           value={search}

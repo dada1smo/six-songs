@@ -11,7 +11,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/mix" element={<Mix />} />
+        <Route path="/mix/:name" element={<Mix />} />
       </Routes>
     </>
   );

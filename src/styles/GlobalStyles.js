@@ -15,6 +15,10 @@ export const GlobalStyles = createGlobalStyle`
             box-sizing: border-box;
         }
 
+        h1 {
+            font-size: 28px;
+        }
+
         h3 {
             font-weight: 500;
             font-size: 20px;
