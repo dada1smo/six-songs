@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { IconButton } from '../styles/Button';
 import { Input } from '../styles/Input';
 import editIcon from '../images/edit-icon.svg';
-import renameIcon from '../images/rename-icon.svg';
 import { Theme } from '../styles/Theme';
 
 const Title = styled.div`
