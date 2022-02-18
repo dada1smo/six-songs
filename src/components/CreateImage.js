@@ -64,6 +64,7 @@ const Canvas = styled.div`
       max-height: 40px;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 22px;
     }
 
     p {
@@ -163,7 +164,7 @@ export default function CreateImage({ mixTitle, songs }) {
                       crossOrigin="anonymous"
                     />
                   </figure>
-                  <div>
+                  <div className="info">
                     <h4>{title}</h4>
                     <p>{artist_names}</p>
                   </div>
