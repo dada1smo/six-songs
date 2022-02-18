@@ -60,6 +60,7 @@ export default function InputTitle({
             value={value}
             onChange={onChange}
             onKeyPress={onKeyPress}
+            maxLength={36}
           />
         </>
       )}

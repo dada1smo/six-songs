@@ -29,6 +29,7 @@ export default function InputAddMix({ value, onChange, onSubmit }) {
           placeholder="6 músicas ..."
           value={value}
           onChange={onChange}
+          maxLength={36}
         />
         <IconButton type="submit">
           <img src={addIcon} alt="" />

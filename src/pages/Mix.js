@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CardSong, { CardSkeleton } from '../components/CardSong';
+import CreateImage from '../components/CreateImage';
 import InputSearch from '../components/InputSearch';
 import InputTitle from '../components/InputTitle';
 import { Device } from '../styles/Breakpoints';
@@ -97,6 +98,7 @@ export default function Mix() {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [allowSave, setAllowSave] = useState(false);
 
   const handleSetTitle = (e) => {
     e.preventDefault();
@@ -125,10 +127,14 @@ export default function Mix() {
 
   useEffect(() => {
     const getSongs = async () => {
+      const headers = {
+        'Access-Control-Allow-Origin': '*',
+      };
       setLoading(true);
       try {
         const { data } = await axios.get(
-          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
+          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`,
+          headers
         );
         const results = data.response.hits.map((song) => song.result);
         const idResult = results.map((song) => song.id);
@@ -151,13 +157,20 @@ export default function Mix() {
 
   useEffect(() => {
     setSelectedIds(selectedSongs.map((song) => song.id));
+    if (selectedSongs.length === 6) {
+      setAllowSave(true);
+    } else {
+      setAllowSave(false);
+    }
   }, [selectedSongs]);
 
   const handleSelectSong = (id) => {
     const selected = searchResults.find((song) => song.id === id);
     const selectedIndex = searchResults.findIndex((song) => song.id === id);
-    searchResults[selectedIndex].selected = true;
-    setSelectedSongs([...selectedSongs, selected]);
+    if (selectedSongs.length <= 5) {
+      searchResults[selectedIndex].selected = true;
+      setSelectedSongs([...selectedSongs, selected]);
+    }
   };
 
   const handleRemoveSong = (id) => {
@@ -257,6 +270,7 @@ export default function Mix() {
             );
           }
         )}
+        {allowSave && <CreateImage songs={selectedSongs} mixTitle={title} />}
       </div>
     </Wrapper>
   );
