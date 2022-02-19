@@ -140,7 +140,7 @@ export default function Mix() {
       setLoading(true);
       try {
         const { data } = await axios.get(
-          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`,
+          `https://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`,
           headers
         );
         const results = data.response.hits.map((song) => song.result);
