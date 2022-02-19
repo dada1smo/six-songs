@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import styled from 'styled-components';
 import { Theme } from '../styles/Theme';
-import { Button, PrimaryButton } from '../styles/Button';
+import { PrimaryButton } from '../styles/Button';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
