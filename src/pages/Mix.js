@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CardSong, { CardSkeleton } from '../components/CardSong';
+import CreateImage from '../components/CreateImage';
 import InputSearch from '../components/InputSearch';
 import InputTitle from '../components/InputTitle';
 import { Device } from '../styles/Breakpoints';
+import { PrimaryButton } from '../styles/Button';
 import { Theme } from '../styles/Theme';
 
 const Wrapper = styled.div`
@@ -75,6 +77,11 @@ const Wrapper = styled.div`
       background: ${Theme.neutral[700]};
       border-radius: 4px;
     }
+
+    .saveMix {
+      display: flex;
+      justify-content: center;
+    }
   }
 `;
 
@@ -97,6 +104,8 @@ export default function Mix() {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [allowSave, setAllowSave] = useState(false);
+  const [showCreateImage, setShowCreateImage] = useState(false);
 
   const handleSetTitle = (e) => {
     e.preventDefault();
@@ -125,10 +134,14 @@ export default function Mix() {
 
   useEffect(() => {
     const getSongs = async () => {
+      const headers = {
+        'Access-Control-Allow-Origin': '*',
+      };
       setLoading(true);
       try {
         const { data } = await axios.get(
-          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`
+          `http://api.genius.com/search/?access_token=${process.env.REACT_APP_API_KEY}&q=${searchTerm}`,
+          headers
         );
         const results = data.response.hits.map((song) => song.result);
         const idResult = results.map((song) => song.id);
@@ -151,13 +164,32 @@ export default function Mix() {
 
   useEffect(() => {
     setSelectedIds(selectedSongs.map((song) => song.id));
+    if (selectedSongs.length === 6) {
+      setAllowSave(true);
+    } else {
+      setAllowSave(false);
+    }
   }, [selectedSongs]);
 
   const handleSelectSong = (id) => {
-    const selected = searchResults.find((song) => song.id === id);
+    const selectedSong = searchResults.find((song) => song.id === id);
+    // const { id, title, artist_names, song_art_image_thumbnail_url, selected } =
+    //   selected;
     const selectedIndex = searchResults.findIndex((song) => song.id === id);
-    searchResults[selectedIndex].selected = true;
-    setSelectedSongs([...selectedSongs, selected]);
+    if (selectedSongs.length < 6) {
+      searchResults[selectedIndex].selected = true;
+      setSelectedSongs([
+        ...selectedSongs,
+        {
+          id: selectedSong.id,
+          title: selectedSong.title,
+          artist_names: selectedSong.artist_names,
+          song_art_image_thumbnail_url:
+            selectedSong.song_art_image_thumbnail_url,
+          selected: selectedSong.selected,
+        },
+      ]);
+    }
   };
 
   const handleRemoveSong = (id) => {
@@ -188,6 +220,18 @@ export default function Mix() {
     selectedSongs.splice(selectedIndex, 1);
     selectedSongs.splice(selectedIndex + 1, 0, selected);
     setSelectedSongs([...selectedSongs]);
+  };
+
+  const handleSaveMix = async () => {
+    const mix = {
+      mixTitle: title,
+      songs: selectedSongs,
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    const { data } = await axios
+      .post(`https://ironrest.herokuapp.com/six-songs/`, mix)
+      .finally(setShowCreateImage(true));
   };
 
   return (
@@ -256,6 +300,14 @@ export default function Mix() {
               </SelectedSongsList>
             );
           }
+        )}
+        {allowSave && (
+          <div className="saveMix">
+            <PrimaryButton onClick={handleSaveMix}>Salvar mix</PrimaryButton>
+          </div>
+        )}
+        {showCreateImage && (
+          <CreateImage songs={selectedSongs} mixTitle={title} />
         )}
       </div>
     </Wrapper>

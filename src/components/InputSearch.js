@@ -22,6 +22,7 @@ export default function InputSearch({ value, onChange, onSubmit }) {
         placeholder="Pesquisar músicas..."
         value={value}
         onChange={onChange}
+        maxLength={56}
       />
       <IconButton type="submit">
         <img src={searchIcon} alt="" />

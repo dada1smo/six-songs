@@ -23,6 +23,19 @@ export const Button = styled.button`
   }
 `;
 
+export const PrimaryButton = styled(Button)`
+  padding: 8px 16px;
+  border-radius: 4px;
+  color: ${Theme.neutral['000']};
+  background: ${(props) =>
+    props.selected ? Theme.hightlight[500] : Theme.neutral[900]};
+
+  &:hover {
+    background: ${(props) =>
+      props.selected ? Theme.hightlight[500] : Theme.primary[500]};
+  }
+`;
+
 export const IconButton = styled(Button)`
   height: 32px;
   width: 32px;
