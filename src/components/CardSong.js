@@ -51,7 +51,7 @@ const Card = styled.div`
       width: 100%;
       background: linear-gradient(
         ${Theme.primary[500]},
-        ${Theme.hightlight[500]},
+        ${Theme.highlight[500]},
         ${Theme.neutral[900]}
       );
       border-radius: 100%;
@@ -71,7 +71,7 @@ const Skeleton = styled(Card)`
     &:after {
       background: linear-gradient(
         -45deg,
-        ${Theme.hightlight[500]},
+        ${Theme.highlight[500]},
         ${Theme.primary[500]},
         ${Theme.neutral[900]}
       );

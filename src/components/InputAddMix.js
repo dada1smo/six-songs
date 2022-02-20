@@ -8,7 +8,6 @@ const AddMix = styled.form`
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 18%;
   margin-top: 1em;
 
   & input {
@@ -19,9 +18,9 @@ const AddMix = styled.form`
 export default function InputAddMix({ value, onChange, onSubmit }) {
   return (
     <>
-      <h3 style={{ marginTop: '6em' }}>
+      <p style={{ marginTop: '6em' }}>
         Qual o nome do seu novo mix de músicas?
-      </h3>
+      </p>
 
       <AddMix onSubmit={onSubmit}>
         <Input

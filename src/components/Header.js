@@ -1,27 +1,33 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import { ContainerHeaderAppBar, HeaderAppBar, IconButtonAddMixAppBar, LogoHeaderAppBar } from "../styles/Header";
-import addIcon from "../images/add-icon.svg";
+import {
+  ContainerHeaderAppBar,
+  HeaderAppBar,
+  LogoHeaderAppBar,
+} from '../styles/Header';
+import addIcon from '../images/add-icon.svg';
+import { PrimaryButton } from '../styles/Button';
+import { Logo } from '../styles/Logo';
 
-export default function Header(){
-    const router = useNavigate();
+export default function Header() {
+  const router = useNavigate();
 
-    const goToAddMix = (e) => {
-        router("/");
-    };
+  const goToAddMix = (e) => {
+    router('/');
+  };
 
-    return (
-        <HeaderAppBar>
-            <ContainerHeaderAppBar>
-                <LogoHeaderAppBar href="/">
-                    <h2>O logo vem aqui</h2>
-                </LogoHeaderAppBar>
+  return (
+    <HeaderAppBar>
+      <ContainerHeaderAppBar>
+        <LogoHeaderAppBar href="/">
+          <Logo height={32} />
+        </LogoHeaderAppBar>
 
-                <IconButtonAddMixAppBar onClick={goToAddMix}>
-                    <img src={addIcon} alt="" /> &nbsp;
-                    Criar novo mix
-                </IconButtonAddMixAppBar>
-            </ContainerHeaderAppBar>
-        </HeaderAppBar>
-    );
+        <PrimaryButton type="button" onClick={goToAddMix}>
+          <img src={addIcon} alt="" />
+          Criar novo mix
+        </PrimaryButton>
+      </ContainerHeaderAppBar>
+    </HeaderAppBar>
+  );
 }

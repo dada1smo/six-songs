@@ -13,6 +13,6 @@ export const Input = styled.input`
   transition: 0.3s;
 
   &:focus {
-    border: 1px solid ${Theme.hightlight[500]};
+    border: 1px solid ${Theme.highlight[500]};
   }
 `;

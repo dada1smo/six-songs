@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CardSong, { CardSkeleton } from '../components/CardSong';
 import CreateImage from '../components/CreateImage';
+import Header from '../components/Header';
 import InputSearch from '../components/InputSearch';
 import InputTitle from '../components/InputTitle';
 import { Device } from '../styles/Breakpoints';
@@ -235,81 +236,84 @@ export default function Mix() {
   };
 
   return (
-    <Wrapper>
-      <div className="title">
-        <InputTitle
-          value={title}
-          onChange={handleSetTitle}
-          handleEditTitle={handleEditTitle}
-          edit={editTitle}
-          onKeyPress={handleFinishEdit}
-        />
-      </div>
-      <div className="search">
-        <InputSearch
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onSubmit={handleSearch}
-        />
-        {loading
-          ? [...Array(10)].map((skeleton, index) => (
-              <CardSkeleton key={index} />
-            ))
-          : searchResults.map(
-              ({
-                id,
-                title,
-                artist_names,
-                song_art_image_thumbnail_url,
-                selected,
-              }) => {
-                return (
+    <>
+      <Header />
+      <Wrapper>
+        <div className="title">
+          <InputTitle
+            value={title}
+            onChange={handleSetTitle}
+            handleEditTitle={handleEditTitle}
+            edit={editTitle}
+            onKeyPress={handleFinishEdit}
+          />
+        </div>
+        <div className="search">
+          <InputSearch
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onSubmit={handleSearch}
+          />
+          {loading
+            ? [...Array(10)].map((skeleton, index) => (
+                <CardSkeleton key={index} />
+              ))
+            : searchResults.map(
+                ({
+                  id,
+                  title,
+                  artist_names,
+                  song_art_image_thumbnail_url,
+                  selected,
+                }) => {
+                  return (
+                    <CardSong
+                      key={id}
+                      id={id}
+                      title={title}
+                      artist={artist_names}
+                      cover={song_art_image_thumbnail_url}
+                      handleSelect={selected ? false : handleSelectSong}
+                      selected={selected}
+                    />
+                  );
+                }
+              )}
+        </div>
+        <div className="selected">
+          {selectedSongs.map(
+            (
+              { id, title, artist_names, song_art_image_thumbnail_url },
+              index
+            ) => {
+              return (
+                <SelectedSongsList key={id}>
+                  <h2>#{index + 1}</h2>
                   <CardSong
-                    key={id}
                     id={id}
+                    isFirst={index === 0}
+                    isLast={index === selectedSongs.length - 1}
                     title={title}
                     artist={artist_names}
                     cover={song_art_image_thumbnail_url}
-                    handleSelect={selected ? false : handleSelectSong}
-                    selected={selected}
+                    handleRemove={handleRemoveSong}
+                    handleMoveUp={handleMoveUp}
+                    handleMoveDown={handleMoveDown}
                   />
-                );
-              }
-            )}
-      </div>
-      <div className="selected">
-        {selectedSongs.map(
-          (
-            { id, title, artist_names, song_art_image_thumbnail_url },
-            index
-          ) => {
-            return (
-              <SelectedSongsList key={id}>
-                <h2>#{index + 1}</h2>
-                <CardSong
-                  id={id}
-                  isFirst={index === 0}
-                  isLast={index === selectedSongs.length - 1}
-                  title={title}
-                  artist={artist_names}
-                  cover={song_art_image_thumbnail_url}
-                  handleRemove={handleRemoveSong}
-                  handleMoveUp={handleMoveUp}
-                  handleMoveDown={handleMoveDown}
-                />
-              </SelectedSongsList>
-            );
-          }
-        )}
-        {allowSave && (
-          <div className="saveMix">
-            <PrimaryButton onClick={handleSaveMix}>Salvar mix</PrimaryButton>
-          </div>
-        )}
-        {showCreateImage && (
-          <CreateImage songs={selectedSongs} mixTitle={title} />
-        )}
-      </div>
-    </Wrapper>
+                </SelectedSongsList>
+              );
+            }
+          )}
+          {allowSave && (
+            <div className="saveMix">
+              <PrimaryButton onClick={handleSaveMix}>Salvar mix</PrimaryButton>
+            </div>
+          )}
+          {showCreateImage && (
+            <CreateImage songs={selectedSongs} mixTitle={title} />
+          )}
+        </div>
+      </Wrapper>
+    </>
   );
 }

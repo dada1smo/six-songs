@@ -3,6 +3,7 @@ import html2canvas from 'html2canvas';
 import styled from 'styled-components';
 import { Theme } from '../styles/Theme';
 import { PrimaryButton } from '../styles/Button';
+import { Logo } from '../styles/Logo';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
@@ -28,11 +29,11 @@ const Canvas = styled.div`
     background: linear-gradient(
       180deg,
       ${Theme.primary[500]} 0%,
-      ${Theme.hightlight[500]} 10%,
+      ${Theme.highlight[500]} 10%,
       ${Theme.neutral[900]} 20%,
       ${Theme.neutral[900]} 80%,
       ${Theme.primary[500]} 90%,
-      ${Theme.hightlight[500]} 100%
+      ${Theme.highlight[500]} 100%
     );
   }
 
@@ -98,11 +99,20 @@ const Canvas = styled.div`
         width: 100%;
         background: linear-gradient(
           ${Theme.primary[500]},
-          ${Theme.hightlight[500]},
+          ${Theme.highlight[500]},
           ${Theme.neutral[900]}
         );
         border-radius: 100%;
       }
+    }
+  }
+
+  .canvasFooter {
+    display: flex;
+    justify-content: flex-end;
+
+    g {
+      fill: ${Theme.neutral['000']};
     }
   }
 `;
@@ -172,7 +182,9 @@ export default function CreateImage({ mixTitle, songs }) {
               );
             }
           )}
-          <p style={{ textAlign: 'right' }}>6musicas</p>
+          <div className="canvasFooter">
+            <Logo height={14} />
+          </div>
         </div>
       </Canvas>
     </div>

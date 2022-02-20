@@ -13,6 +13,7 @@ export const Button = styled.button`
   outline: 0;
   border: none;
   text-decoration: none;
+  gap: 8px;
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
   position: relative;
@@ -24,15 +25,17 @@ export const Button = styled.button`
 `;
 
 export const PrimaryButton = styled(Button)`
-  padding: 8px 16px;
+  padding: 8px 20px;
   border-radius: 4px;
+  border-radius: 400px;
+  font-size: 20px;
   color: ${Theme.neutral['000']};
   background: ${(props) =>
-    props.selected ? Theme.hightlight[500] : Theme.neutral[900]};
+    props.selected ? Theme.highlight[500] : Theme.neutral[900]};
 
   &:hover {
     background: ${(props) =>
-      props.selected ? Theme.hightlight[500] : Theme.primary[500]};
+      props.selected ? Theme.highlight[500] : Theme.primary[500]};
   }
 `;
 
@@ -44,10 +47,10 @@ export const IconButton = styled(Button)`
   border-radius: 100%;
   opacity: ${(props) => (props.disabled ? '40%' : '100%')};
   background: ${(props) =>
-    props.selected ? Theme.hightlight[500] : Theme.neutral[900]};
+    props.selected ? Theme.highlight[500] : Theme.neutral[900]};
 
   &:hover {
     background: ${(props) =>
-      props.selected ? Theme.hightlight[500] : Theme.primary[500]};
+      props.selected ? Theme.highlight[500] : Theme.primary[500]};
   }
 `;

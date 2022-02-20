@@ -3,7 +3,7 @@ export const Theme = {
   primary: {
     500: '#BB6BD9',
   },
-  hightlight: {
+  highlight: {
     500: '#D0FC00',
   },
   neutral: {

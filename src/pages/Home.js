@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import InputAddMix from '../components/InputAddMix';
+import logo from '../images/logo.svg';
+import { Logo } from '../styles/Logo';
 
 const Wrapper = styled.div`
   display: flex;
@@ -9,13 +11,10 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-`;
 
-const SubTitle = styled.p`
-  font-size: 28px;
-  text-align: center;
-  width: 450px;
-  margin-top: 2rem;
+  svg {
+    margin-bottom: 40px;
+  }
 `;
 
 export default function Home() {
@@ -35,11 +34,9 @@ export default function Home() {
 
   return (
     <Wrapper>
-      <h1>6 musicas</h1>
+      <Logo height={52} />
 
-      <SubTitle>
-        Crie e compartilhe as músicas que marcaram um momento.
-      </SubTitle>
+      <h2>Crie e compartilhe as músicas que marcaram um momento.</h2>
 
       <InputAddMix
         value={mix}

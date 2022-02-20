@@ -30,7 +30,7 @@ const InputLg = styled(Input)`
 
   &:focus {
     border: none;
-    border-bottom: 1px solid ${Theme.hightlight[500]};
+    border-bottom: 1px solid ${Theme.highlight[500]};
   }
 `;
 
