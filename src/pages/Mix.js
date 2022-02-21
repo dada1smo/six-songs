@@ -120,7 +120,16 @@ export default function Mix() {
   };
 
   const handleFinishEdit = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && title.length > 3) {
+      e.preventDefault();
+      const fullTitle = `6 músicas ${title}`;
+      setTitle(fullTitle);
+      setEditTitle(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    if (title.length > 3) {
       e.preventDefault();
       const fullTitle = `6 músicas ${title}`;
       setTitle(fullTitle);
@@ -246,6 +255,7 @@ export default function Mix() {
             handleEditTitle={handleEditTitle}
             edit={editTitle}
             onKeyPress={handleFinishEdit}
+            handleSubmit={handleSubmit}
           />
         </div>
         <div className="search">

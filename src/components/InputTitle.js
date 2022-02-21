@@ -3,14 +3,27 @@ import { IconButton } from '../styles/Button';
 import { Input } from '../styles/Input';
 import editIcon from '../images/edit-icon.svg';
 import { Theme } from '../styles/Theme';
+import checkIconLight from '../images/check-icon-light.svg';
 
 const Title = styled.div`
+  background: ${(props) =>
+    props.active ? `${Theme.neutral[900]}` : 'transparent'};
+  padding: 12px 20px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: 0.3s;
+  border: ${(props) =>
+    props.active ? `1px solid ${Theme.neutral[900]}` : 'none'};
 
   & input {
-    flex-grow: 1;
+    flex: 1;
+  }
+
+  &:focus-within {
+    border: ${(props) =>
+      props.active ? `1px solid ${Theme.highlight[500]}` : 'none'};
   }
 
   h1 {
@@ -19,18 +32,16 @@ const Title = styled.div`
 `;
 
 const InputLg = styled(Input)`
-  font-size: 28px;
-  font-weight: 600;
   background: transparent;
+  font-size: 24px;
+  font-weight: 600;
   border: none;
   padding: 0;
   border-radius: 0;
-  border-bottom: 1px solid ${Theme.neutral[900]};
   min-width: 40vw;
 
   &:focus {
     border: none;
-    border-bottom: 1px solid ${Theme.highlight[500]};
   }
 `;
 
@@ -40,19 +51,20 @@ export default function InputTitle({
   edit = false,
   handleEditTitle,
   onKeyPress,
+  handleSubmit,
 }) {
   return (
-    <Title>
+    <Title active={edit}>
       {!edit ? (
         <>
-          <h1>{value}</h1>
+          <h2>{value}</h2>
           <IconButton>
             <img src={editIcon} onClick={handleEditTitle} alt="" />
           </IconButton>
         </>
       ) : (
         <>
-          <h1>6 músicas</h1>
+          <h2>6 músicas</h2>
           <InputLg
             type="text"
             preffix="6 músicas"
@@ -62,6 +74,9 @@ export default function InputTitle({
             onKeyPress={onKeyPress}
             maxLength={32}
           />
+          <IconButton>
+            <img src={checkIconLight} onClick={handleSubmit} alt="" />
+          </IconButton>
         </>
       )}
     </Title>

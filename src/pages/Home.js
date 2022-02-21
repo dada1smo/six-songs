@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import InputAddMix from '../components/InputAddMix';
-import logo from '../images/logo.svg';
 import { Logo } from '../styles/Logo';
+import InputTitle from '../components/InputTitle';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,17 +17,25 @@ const Wrapper = styled.div`
 `;
 
 export default function Home() {
-  const [mix, setMix] = useState('');
+  const [title, setTitle] = useState('');
   const router = useNavigate();
 
-  const handleChange = (e) => {
-    setMix(e.target.value);
+  const handleSetTitle = (e) => {
+    e.preventDefault();
+    setTitle(e.target.value);
+  };
+
+  const handleFinishEdit = (e) => {
+    if (e.key === 'Enter' && title.length > 3) {
+      e.preventDefault();
+      router(`/mix/${title}`);
+    }
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (mix.length > 3) {
-      router(`/mix/${mix}`);
+    if (title.length > 3) {
+      e.preventDefault();
+      router(`/mix/${title}`);
     }
   };
 
@@ -38,10 +45,20 @@ export default function Home() {
 
       <h2>Crie e compartilhe as músicas que marcaram um momento.</h2>
 
-      <InputAddMix
+      {/* <InputAddMix
         value={mix}
         onChange={handleChange}
         onSubmit={handleSubmit}
+      /> */}
+      <p style={{ margin: '6em 0 2em' }}>
+        Qual o nome do seu novo mix de músicas?
+      </p>
+      <InputTitle
+        value={title}
+        onChange={handleSetTitle}
+        edit={true}
+        onKeyPress={handleFinishEdit}
+        handleSubmit={handleSubmit}
       />
     </Wrapper>
   );
