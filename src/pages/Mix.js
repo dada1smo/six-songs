@@ -10,6 +10,7 @@ import InputTitle from '../components/InputTitle';
 import { Device } from '../styles/Breakpoints';
 import { PrimaryButton } from '../styles/Button';
 import { Theme } from '../styles/Theme';
+import Modal from "../components/Modal";
 
 const Wrapper = styled.div`
   padding: 40px 60px;
@@ -107,6 +108,7 @@ export default function Mix() {
   const [loading, setLoading] = useState(false);
   const [allowSave, setAllowSave] = useState(false);
   const [showCreateImage, setShowCreateImage] = useState(false);
+  const [showModal, setShowModal] = useState(false); 
 
   const handleSetTitle = (e) => {
     e.preventDefault();
@@ -233,6 +235,7 @@ export default function Mix() {
   };
 
   const handleSaveMix = async () => {
+    setShowModal(!showModal)
     const mix = {
       mixTitle: title,
       songs: selectedSongs,
@@ -323,6 +326,7 @@ export default function Mix() {
             <CreateImage songs={selectedSongs} mixTitle={title} />
           )}
         </div>
+        <Modal show={showModal} title="Salvar imagem" children={<CreateImage songs={selectedSongs} mixTitle={title} />} />
       </Wrapper>
     </>
   );

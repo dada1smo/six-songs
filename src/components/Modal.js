@@ -49,7 +49,6 @@ export default function Modal({ show, title, onClose, children }) {
                 style={show ? styleModalContentShow : null}
             >
                 <ModalTitleStyled>
-                    <h3>{title}</h3>
                     <PrimaryButton onClick={onClose}>
                         <img src={removeIcon} alt="" />
                     </PrimaryButton>

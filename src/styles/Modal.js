@@ -15,6 +15,7 @@ export const ModalStyled = styled.div`
   opacity: 0;
   transition: all 0.3s ease-in-out;
   pointer-events: none;
+  z-index:4000;
 `;
 
 export const ModalContentStyled = styled.div`
@@ -26,8 +27,8 @@ export const ModalContentStyled = styled.div`
 
 export const ModalTitleStyled = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
+  justify-content: flex-end;
+  padding: 2px;
 `;
 
 export const ModalBodyStyled = styled.div`
