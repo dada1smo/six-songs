@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { Theme } from "./Theme";
+import { Theme } from './Theme';
 
 export const ModalStyled = styled.div`
   position: fixed;
@@ -15,7 +15,7 @@ export const ModalStyled = styled.div`
   opacity: 0;
   transition: all 0.3s ease-in-out;
   pointer-events: none;
-  z-index:4000;
+  z-index: 4000;
 `;
 
 export const ModalContentStyled = styled.div`
@@ -23,28 +23,15 @@ export const ModalContentStyled = styled.div`
   background-color: ${Theme.neutral[800]};
   transform: translateY(-200px);
   transition: all 0.3s ease-in-out;
+  border-radius: 8px;
 `;
 
 export const ModalTitleStyled = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 2px;
+  padding: 8px 8px 0;
 `;
 
 export const ModalBodyStyled = styled.div`
-  padding: 10px;
+  padding: 8px 20px 16px;
 `;
-
-// export const ModalButtonCloseStyled = styled.button`
-//   width: 10%;
-//   height: 15%;
-//   color: ${Theme.neutral["000"]};
-//   background-color: ${Theme.neutral[800]};
-//   border: 1px solid ${Theme.neutral["000"]};
-//   border-radius: 8px;
-//
-//   &:hover {
-//     cursor: pointer;
-//     background: ${(props) => props.selected ? Theme.highlight[500] : Theme.primary[500]};
-//   }
-// `;

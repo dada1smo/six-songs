@@ -2,11 +2,23 @@ import { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import styled from 'styled-components';
 import { Theme } from '../styles/Theme';
-import { PrimaryButton } from '../styles/Button';
+import { PrimaryButton, PrimaryButtonLink } from '../styles/Button';
 import { Logo } from '../styles/Logo';
+import Modal from './Modal';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
+const buttonHeight = '41px';
+
+const SingleButton = styled.div`
+  max-height: ${buttonHeight};
+  height: ${buttonHeight};
+  min-height: ${buttonHeight};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Canvas = styled.div`
   background: ${Theme.neutral[900]};
@@ -117,11 +129,29 @@ const Canvas = styled.div`
   }
 `;
 
-export default function CreateImage({ mixTitle, songs }) {
+const SaveImage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-direction: column;
+`;
+
+const MixImage = styled.img`
+  max-height: 72vh;
+  width: auto;
+`;
+
+export default function CreateImage({ mixTitle, songs, handleSave }) {
   const [image, setImage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [saved, setSaved] = useState(false);
   const printRef = useRef();
 
   const handleDownloadImage = async () => {
+    if (!saved) {
+      handleSave();
+    }
+    setSaved(true);
     const element = printRef.current;
     const canvas = await html2canvas(element, {
       logging: true,
@@ -133,60 +163,57 @@ export default function CreateImage({ mixTitle, songs }) {
     });
 
     const data = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-
-    if (typeof link.download === 'string') {
-      link.href = data;
-      link.download = `${mixTitle}.png`;
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      window.open(data);
-    }
 
     setImage(data);
+    setShowModal(!showModal);
   };
 
   return (
-    <div
-    // style={{ maxHeight: 36, overflow: 'hidden', height: 36, minHeight: 36 }}
-    >
-      <PrimaryButton type="button" onClick={handleDownloadImage}>
-        Salvar imagem
-      </PrimaryButton>
-      <Canvas ref={printRef}>
-        <div className="songs">
-          <h2>{mixTitle}</h2>
-          {songs.map(
-            (
-              { id, title, artist_names, song_art_image_thumbnail_url },
-              index
-            ) => {
-              return (
-                <div className="song" key={id}>
-                  <h4>#{index + 1}</h4>
-                  <figure>
-                    <img
-                      src={`${song_art_image_thumbnail_url}?time=${new Date().valueOf()}`}
-                      alt={`Cover for ${title}`}
-                      crossOrigin="anonymous"
-                    />
-                  </figure>
-                  <div className="info">
-                    <h4>{title}</h4>
-                    <p>{artist_names}</p>
+    <>
+      <SingleButton>
+        <PrimaryButton type="button" onClick={handleDownloadImage}>
+          Salvar mix
+        </PrimaryButton>
+        <Canvas ref={printRef}>
+          <div className="songs">
+            <h2>{mixTitle}</h2>
+            {songs.map(
+              (
+                { id, title, artist_names, song_art_image_thumbnail_url },
+                index
+              ) => {
+                return (
+                  <div className="song" key={id}>
+                    <h4>#{index + 1}</h4>
+                    <figure>
+                      <img
+                        src={`${song_art_image_thumbnail_url}?time=${new Date().valueOf()};SameSite=None`}
+                        alt={`Cover for ${title}`}
+                        crossOrigin="anonymous"
+                      />
+                    </figure>
+                    <div className="info">
+                      <h4>{title}</h4>
+                      <p>{artist_names}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-          )}
-          <div className="canvasFooter">
-            <Logo height={14} />
+                );
+              }
+            )}
+            <div className="canvasFooter">
+              <Logo height={14} />
+            </div>
           </div>
-        </div>
-      </Canvas>
-    </div>
+        </Canvas>
+      </SingleButton>
+      <Modal show={showModal} onClose={() => setShowModal(!showModal)}>
+        <SaveImage>
+          <MixImage src={image} alt="" />
+          <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
+            Baixar imagem
+          </PrimaryButtonLink>
+        </SaveImage>
+      </Modal>
+    </>
   );
 }
