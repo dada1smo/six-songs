@@ -152,11 +152,6 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
   const size = useWindowSize();
 
   const handleDownloadImage = async () => {
-    // if (size.width < 1024) {
-    //   document
-    //     .getElementById('viewport')
-    //     .setAttribute('content', 'width=1200px');
-    // }
     if (!saved) {
       handleSave();
     }
@@ -172,17 +167,9 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
     });
 
     const data = canvas.toDataURL('image/png');
-    const png = new File(data, mixTitle, {
-      type: 'image/png',
-    });
 
-    setImage(png);
+    setImage(data);
     setShowModal(!showModal);
-    // if (size.width < 1024) {
-    //   document
-    //     .getElementById('viewport')
-    //     .setAttribute('content', 'width=device-width, initial-scale=1');
-    // }
   };
 
   return (
