@@ -7,6 +7,7 @@ import { Logo } from '../styles/Logo';
 import Modal from './Modal';
 import checkIconLight from '../images/check-icon-light.svg';
 import downloadIcon from '../images/download-icon.svg';
+import useWindowSize from '../hooks/use-window-size';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
@@ -148,8 +149,14 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
   const [showModal, setShowModal] = useState(false);
   const [saved, setSaved] = useState(false);
   const printRef = useRef();
+  const size = useWindowSize();
 
   const handleDownloadImage = async () => {
+    if (size.width < 1024) {
+      document
+        .getElementById('viewport')
+        .setAttribute('content', 'width=1200px');
+    }
     if (!saved) {
       handleSave();
     }
@@ -168,6 +175,11 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
 
     setImage(data);
     setShowModal(!showModal);
+    if (size.width < 1024) {
+      document
+        .getElementById('viewport')
+        .setAttribute('content', 'width=device-width, initial-scale=1');
+    }
   };
 
   return (
