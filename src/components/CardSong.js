@@ -6,6 +6,7 @@ import removeIcon from '../images/remove-icon.svg';
 import arrowUpIcon from '../images/arrow-up-icon.svg';
 import arrowDownIcon from '../images/arrow-down-icon.svg';
 import { IconButton } from '../styles/Button';
+import { Device } from '../styles/Breakpoints';
 
 const Card = styled.div`
   background: ${Theme.neutral[900]};
@@ -24,6 +25,10 @@ const Card = styled.div`
 
   & h3 {
     margin-bottom: 4px;
+
+    @media ${Device.tablet} {
+      font-size: 16px;
+    }
   }
 
   & figure {
@@ -56,6 +61,19 @@ const Card = styled.div`
       );
       border-radius: 100%;
     }
+
+    @media ${Device.tablet} {
+      height: 60px;
+      width: 60px;
+      min-height: 60px;
+      min-width: 60px;
+
+      img {
+        max-width: 52px;
+        position: relative;
+        z-index: 20;
+      }
+    }
   }
 
   & .actions {
@@ -63,6 +81,10 @@ const Card = styled.div`
     flex-direction: column;
     gap: 8px;
     width: 40px;
+
+    @media ${Device.tablet} {
+      width: 24px;
+    }
   }
 `;
 

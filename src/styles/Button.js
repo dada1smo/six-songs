@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Device } from './Breakpoints';
 import { Theme } from './Theme';
 
 export const Button = styled.button`
@@ -52,6 +53,18 @@ export const IconButton = styled(Button)`
   &:hover {
     background: ${(props) =>
       props.selected ? Theme.highlight[500] : Theme.primary[500]};
+  }
+
+  @media ${Device.tablet} {
+    height: 24px;
+    width: 24px;
+    min-height: 24px;
+    min-width: 24px;
+
+    & img {
+      width: 16px;
+      height: 16px;
+    }
   }
 `;
 
