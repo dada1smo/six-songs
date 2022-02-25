@@ -4,6 +4,7 @@ import { Input } from '../styles/Input';
 import editIcon from '../images/edit-icon.svg';
 import { Theme } from '../styles/Theme';
 import checkIconLight from '../images/check-icon-light.svg';
+import { Device } from '../styles/Breakpoints';
 
 const Title = styled.div`
   background: ${(props) =>
@@ -12,7 +13,7 @@ const Title = styled.div`
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   transition: 0.3s;
   border: ${(props) =>
     props.active ? `1px solid ${Theme.neutral[900]}` : 'none'};
@@ -26,8 +27,14 @@ const Title = styled.div`
       props.active ? `1px solid ${Theme.highlight[500]}` : 'none'};
   }
 
-  h1 {
-    border-bottom: 1px solid ${Theme.neutral[800]};
+  @media ${Device.tablet} {
+    padding: 8px 12px;
+  }
+
+  h2 {
+    @media ${Device.tablet} {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -42,6 +49,10 @@ const InputLg = styled(Input)`
 
   &:focus {
     border: none;
+  }
+
+  @media ${Device.tablet} {
+    font-size: 20px;
   }
 `;
 

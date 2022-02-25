@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { IconButton, PrimaryButton } from '../styles/Button';
+import useWindowSize from '../hooks/use-window-size';
 
 export default function All() {
   const [collection, setCollection] = useState([]);

@@ -7,22 +7,26 @@ import CreateImage from '../components/CreateImage';
 import Header from '../components/Header';
 import InputSearch from '../components/InputSearch';
 import InputTitle from '../components/InputTitle';
-import { Device } from '../styles/Breakpoints';
+import Modal from '../components/Modal';
+import useWindowSize from '../hooks/use-window-size';
+import { Device, ScreenSize } from '../styles/Breakpoints';
 import { PrimaryButton } from '../styles/Button';
 import { Theme } from '../styles/Theme';
+import searchIcon from '../images/search-icon.svg';
 
 const Wrapper = styled.div`
-  padding: 40px 60px;
+  padding: 60px 60px 40px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 20% 80%;
+  grid-template-rows: 88px auto;
   column-gap: 16px;
   height: 100vh;
 
   @media ${Device.laptop} {
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 20% 40% 40%;
+    grid-template-rows: 88px 60px auto;
     gap: 16px;
+    padding: 60px 16px 20px;
   }
 
   & .title {
@@ -38,6 +42,30 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 12px;
     overflow: auto;
+    padding: 0 16px 20px 0;
+
+    @media ${Device.laptop} {
+      grid-column: 1 / span all;
+      grid-row: 2 / span 1;
+    }
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 100%;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: ${Theme.neutral[700]};
+      border-radius: 4px;
+    }
+  }
+
+  & .searchMobile {
+    grid-column: 1 / span 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
     padding: 0 16px 20px 0;
 
     @media ${Device.laptop} {
@@ -93,6 +121,39 @@ const SelectedSongsList = styled.div`
   & div {
     width: 100%;
   }
+
+  @media ${Device.mobileL} {
+    flex-direction: column;
+  }
+`;
+
+const SearchMobile = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 20px 0;
+  height: 80vh;
+  min-width: 50vw;
+  max-width: 90vw;
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px 20px 0;
+    overflow: auto;
+    height: 100%;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 100%;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: ${Theme.neutral[700]};
+      border-radius: 4px;
+    }
+  }
 `;
 
 export default function Mix() {
@@ -106,8 +167,8 @@ export default function Mix() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allowSave, setAllowSave] = useState(false);
-  const [showCreateImage, setShowCreateImage] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const size = useWindowSize();
 
   const handleSetTitle = (e) => {
     e.preventDefault();
@@ -234,16 +295,16 @@ export default function Mix() {
   };
 
   const handleSaveMix = async () => {
-    setShowModal(!showModal);
     const mix = {
       mixTitle: title,
       songs: selectedSongs,
     };
 
     // eslint-disable-next-line no-unused-vars
-    const { data } = await axios
-      .post(`https://ironrest.herokuapp.com/six-songs/`, mix)
-      .finally(setShowCreateImage(true));
+    const { data } = await axios.post(
+      `https://ironrest.herokuapp.com/six-songs/`,
+      mix
+    );
   };
 
   return (
@@ -260,38 +321,47 @@ export default function Mix() {
             handleSubmit={handleSubmit}
           />
         </div>
-        <div className="search">
-          <InputSearch
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onSubmit={handleSearch}
-          />
-          {loading
-            ? [...Array(10)].map((skeleton, index) => (
-                <CardSkeleton key={index} />
-              ))
-            : searchResults.map(
-                ({
-                  id,
-                  title,
-                  artist_names,
-                  song_art_image_thumbnail_url,
-                  selected,
-                }) => {
-                  return (
-                    <CardSong
-                      key={id}
-                      id={id}
-                      title={title}
-                      artist={artist_names}
-                      cover={song_art_image_thumbnail_url}
-                      handleSelect={selected ? false : handleSelectSong}
-                      selected={selected}
-                    />
-                  );
-                }
-              )}
-        </div>
+        {size.width > ScreenSize.laptop ? (
+          <div className="search">
+            <InputSearch
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onSubmit={handleSearch}
+            />
+            {loading
+              ? [...Array(10)].map((skeleton, index) => (
+                  <CardSkeleton key={index} />
+                ))
+              : searchResults.map(
+                  ({
+                    id,
+                    title,
+                    artist_names,
+                    song_art_image_thumbnail_url,
+                    selected,
+                  }) => {
+                    return (
+                      <CardSong
+                        key={id}
+                        id={id}
+                        title={title}
+                        artist={artist_names}
+                        cover={song_art_image_thumbnail_url}
+                        handleSelect={selected ? false : handleSelectSong}
+                        selected={selected}
+                      />
+                    );
+                  }
+                )}
+          </div>
+        ) : (
+          <div className="searchMobile">
+            <PrimaryButton onClick={() => setShowModal(!showModal)}>
+              <img src={searchIcon} alt="" />
+              Procurar músicas
+            </PrimaryButton>
+          </div>
+        )}
         <div className="selected">
           {selectedSongs.map(
             (
@@ -327,6 +397,44 @@ export default function Mix() {
           )}
         </div>
       </Wrapper>
+      {size.width < ScreenSize.laptop && (
+        <Modal show={showModal} onClose={() => setShowModal(!showModal)}>
+          <SearchMobile>
+            <InputSearch
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onSubmit={handleSearch}
+            />
+            <div className="list">
+              {loading
+                ? [...Array(10)].map((skeleton, index) => (
+                    <CardSkeleton key={index} />
+                  ))
+                : searchResults.map(
+                    ({
+                      id,
+                      title,
+                      artist_names,
+                      song_art_image_thumbnail_url,
+                      selected,
+                    }) => {
+                      return (
+                        <CardSong
+                          key={id}
+                          id={id}
+                          title={title}
+                          artist={artist_names}
+                          cover={song_art_image_thumbnail_url}
+                          handleSelect={selected ? false : handleSelectSong}
+                          selected={selected}
+                        />
+                      );
+                    }
+                  )}
+            </div>
+          </SearchMobile>
+        </Modal>
+      )}
     </>
   );
 }

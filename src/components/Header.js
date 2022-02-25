@@ -8,9 +8,12 @@ import {
 import addIcon from '../images/add-icon.svg';
 import { PrimaryButton } from '../styles/Button';
 import { Logo } from '../styles/Logo';
+import useWindowSize from '../hooks/use-window-size';
+import { ScreenSize } from '../styles/Breakpoints';
 
 export default function Header() {
   const router = useNavigate();
+  const size = useWindowSize();
 
   const goToAddMix = (e) => {
     router('/');
@@ -23,10 +26,12 @@ export default function Header() {
           <Logo height={32} />
         </LogoHeaderAppBar>
 
-        <PrimaryButton type="button" onClick={goToAddMix}>
-          <img src={addIcon} alt="" />
-          Criar novo mix
-        </PrimaryButton>
+        {size.width > ScreenSize.tablet && (
+          <PrimaryButton type="button" onClick={goToAddMix}>
+            <img src={addIcon} alt="" />
+            Criar novo mix
+          </PrimaryButton>
+        )}
       </ContainerHeaderAppBar>
     </HeaderAppBar>
   );

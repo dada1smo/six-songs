@@ -5,6 +5,8 @@ import { Theme } from '../styles/Theme';
 import { PrimaryButton, PrimaryButtonLink } from '../styles/Button';
 import { Logo } from '../styles/Logo';
 import Modal from './Modal';
+import checkIconLight from '../images/check-icon-light.svg';
+import downloadIcon from '../images/download-icon.svg';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
@@ -172,6 +174,7 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
     <>
       <SingleButton>
         <PrimaryButton type="button" onClick={handleDownloadImage}>
+          <img src={checkIconLight} alt="" />
           Salvar mix
         </PrimaryButton>
         <Canvas ref={printRef}>
@@ -210,6 +213,7 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
         <SaveImage>
           <MixImage src={image} alt="" />
           <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
+            <img src={downloadIcon} alt="" />
             Baixar imagem
           </PrimaryButtonLink>
         </SaveImage>

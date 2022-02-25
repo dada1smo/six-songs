@@ -10,9 +10,14 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 20px 16px;
 
   svg {
     margin-bottom: 40px;
+  }
+
+  h2 {
+    text-align: center;
   }
 `;
 
@@ -44,12 +49,6 @@ export default function Home() {
       <Logo height={52} />
 
       <h2>Crie e compartilhe as músicas que marcaram um momento.</h2>
-
-      {/* <InputAddMix
-        value={mix}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-      /> */}
       <p style={{ margin: '6em 0 2em' }}>
         Qual o nome do seu novo mix de músicas?
       </p>

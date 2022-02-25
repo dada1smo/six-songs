@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-
-import { IconButton } from './Button';
+import { Device } from './Breakpoints';
 import { Theme } from './Theme';
 
 export const HeaderAppBar = styled.header`
   background-color: ${Theme.neutral[800]};
-  padding: 0.75rem 0;
+  padding: 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -18,9 +17,13 @@ export const ContainerHeaderAppBar = styled.nav`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 1.5rem 2.75rem 0;
+  padding: 1rem 2.75rem 0;
   margin-right: auto;
   margin-left: auto;
+
+  @media ${Device.laptop} {
+    padding: 1rem 0.25rem 0;
+  }
 `;
 
 export const LogoHeaderAppBar = styled.a`
