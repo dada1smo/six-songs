@@ -8,6 +8,8 @@ import Modal from './Modal';
 import checkIconLight from '../images/check-icon-light.svg';
 import downloadIcon from '../images/download-icon.svg';
 import useWindowSize from '../hooks/use-window-size';
+import { ScreenSize } from '../styles/Breakpoints';
+import { useNavigate } from 'react-router-dom';
 
 const canvasHeight = '640px';
 const canvasWidth = '360px';
@@ -150,13 +152,30 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
   const [saved, setSaved] = useState(false);
   const printRef = useRef();
   const size = useWindowSize();
+  const router = useNavigate();
+
+  function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new File([ab], mixTitle, { type: 'image/png' });
+    return blob;
+  }
 
   const handleDownloadImage = async () => {
-    // if (size.width < 1024) {
-    //   document
-    //     .getElementById('viewport')
-    //     .setAttribute('content', 'width=1200px');
-    // }
     if (!saved) {
       handleSave();
     }
@@ -172,14 +191,11 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
     });
 
     const data = canvas.toDataURL('image/png');
+    const png = dataURItoBlob(data);
+    const url = URL.createObjectURL(png);
 
-    setImage(data);
+    setImage(url);
     setShowModal(!showModal);
-    // if (size.width < 1024) {
-    //   document
-    //     .getElementById('viewport')
-    //     .setAttribute('content', 'width=device-width, initial-scale=1');
-    // }
   };
 
   return (
@@ -224,10 +240,19 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
       <Modal show={showModal} onClose={() => setShowModal(!showModal)}>
         <SaveImage>
           <MixImage src={image} alt="" />
-          <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
-            <img src={downloadIcon} alt="" />
-            Baixar imagem
-          </PrimaryButtonLink>
+          {size.width > ScreenSize.tablet ? (
+            <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
+              <img src={downloadIcon} alt="" />
+              Baixar imagem
+            </PrimaryButtonLink>
+          ) : (
+            <PrimaryButton
+              onClick={(event) => (window.location.href = `${image}`)}
+            >
+              <img src={downloadIcon} alt="" />
+              Baixar imagem
+            </PrimaryButton>
+          )}
         </SaveImage>
       </Modal>
     </>
