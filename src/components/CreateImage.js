@@ -152,6 +152,9 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
   const size = useWindowSize();
 
   const handleDownloadImage = async () => {
+    if (size.width < 1024) {
+      document.getElementById('viewport').setAttribute('content', 'width=1200');
+    }
     if (!saved) {
       handleSave();
     }
@@ -170,6 +173,11 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
 
     setImage(data);
     setShowModal(!showModal);
+    if (size.width < 1024) {
+      document
+        .getElementById('viewport')
+        .setAttribute('content', 'width=device-width, initial-scale=1');
+    }
   };
 
   return (
@@ -214,7 +222,7 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
       <Modal show={showModal} onClose={() => setShowModal(!showModal)}>
         <SaveImage>
           <MixImage src={image} alt="" />
-          <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
+          <PrimaryButtonLink href={image} download={mixTitle}>
             <img src={downloadIcon} alt="" />
             Baixar imagem
           </PrimaryButtonLink>
