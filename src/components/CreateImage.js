@@ -240,19 +240,10 @@ export default function CreateImage({ mixTitle, songs, handleSave }) {
       <Modal show={showModal} onClose={() => setShowModal(!showModal)}>
         <SaveImage>
           <MixImage src={image} alt="" />
-          {size.width > ScreenSize.tablet ? (
-            <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
-              <img src={downloadIcon} alt="" />
-              Baixar imagem
-            </PrimaryButtonLink>
-          ) : (
-            <PrimaryButton
-              onClick={(event) => (window.location.href = `${image}`)}
-            >
-              <img src={downloadIcon} alt="" />
-              Baixar imagem
-            </PrimaryButton>
-          )}
+          <PrimaryButtonLink href={image} download={`${mixTitle}.png`}>
+            <img src={downloadIcon} alt="" />
+            Baixar imagem
+          </PrimaryButtonLink>
         </SaveImage>
       </Modal>
     </>
